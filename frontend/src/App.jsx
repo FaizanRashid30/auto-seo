@@ -22,7 +22,7 @@ function App() {
   return (
     <div className="flex">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <div className="flex-1 min-h-screen bg-gray-100">
+      <div className="flex-1 min-h-screen bg-gray-100  mt-10">
         <Navbar toggleSidebar={toggleSidebar} />
       
         <Routes>
