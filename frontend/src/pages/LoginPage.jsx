@@ -6,13 +6,20 @@ const LoginPage = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  // Admin email (specifically check karein)
+  const adminEmail = "admin@gmail.com";  // <-- Tum yahan apni admin email change kar sakte ho
+
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Dummy login logic
     if (email && password) {
-      onLogin(); // Let App.jsx know user logged in
-      navigate('/'); // Go to home
+      onLogin(); // App.jsx ko batayenge user login hua
+
+      if (email === adminEmail) {
+        navigate('/admin-dashboard'); // If admin, redirect to Admin Dashboard
+      } else {
+        navigate('/home'); // Normal user goes to home
+      }
     } else {
       alert('Please fill all fields');
     }
@@ -21,7 +28,7 @@ const LoginPage = ({ onLogin }) => {
   const handleGoogleLogin = () => {
     alert('Google login (dummy)');
     onLogin();
-    navigate('/');
+    navigate('/home'); // Google login hamesha home bhej raha (simple logic ke liye)
   };
 
   return (
@@ -67,7 +74,13 @@ const LoginPage = ({ onLogin }) => {
         </button>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don’t have an account? <span className="text-blue-600 cursor-pointer hover:underline" onClick={() => navigate('/signup')}>Sign up</span>
+          Don’t have an account?{" "}
+          <span
+            className="text-blue-600 cursor-pointer hover:underline"
+            onClick={() => navigate('/signup')}
+          >
+            Sign up
+          </span>
         </p>
       </div>
     </div>
