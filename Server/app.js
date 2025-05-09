@@ -3,8 +3,9 @@ const express = require("express");
 
 const app = express();
 const cors =require("cors");
+require("./db/conn.js")
 const PORT = 6005;
-
+ 
 app.use(cors({
     origin:"http://localhost:3001",
     methods:"GET, POST, PUT, DELETE",
