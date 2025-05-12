@@ -1,42 +1,50 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Profile = () => {
-  const [user, setUser] = useState({
-    name: "Azan Saleem",
-    email: "azansaleem7@gmail.com",
-    profilePic: "https://i.pravatar.cc/150?img=12",
-    joinedDate: "2024-04-10",
-    seoGenerations: 42
-  });
+  const [user, setUser] = useState(null);
+
+  const getUser = async () => {
+    try {
+      const response = await axios.get("http://localhost:6005/login/sucess", {
+        withCredentials: true,
+      });
+      setUser(response.data.user);
+    } catch (error) {
+      console.log("Failed to fetch user:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-lg font-semibold">
+        Loading profile...
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-950 to-black flex items-center justify-center p-5">
-      <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
         <img
-          src={user.profilePic}
-          alt="Profile"
-          className="w-24 h-24 mx-auto rounded-full shadow-md mb-4 object-cover"
+          src={user?.image || user?.photo}
+          alt="User"
+          className="w-28 h-28 rounded-full mx-auto mb-4 border-4 border-indigo-500 object-cover"
         />
-        <h1 className="text-2xl font-bold text-gray-800">{user.name}</h1>
-        <p className="text-gray-500">{user.email}</p>
-
-        <div className="mt-4">
-          <p className="text-sm text-gray-600">Joined: {user.joinedDate}</p>
-          <p className="text-sm text-gray-600">SEO Generated: {user.seoGenerations} times</p>
-        </div>
-
-        <div className="mt-6 flex flex-col gap-3">
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-all"
-          >
-            Edit Profile
-          </button>
-          <button
-            className="bg-red-400 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg transition-all"
-          >
-            Logout
-          </button>
-        </div>
+        <h2 className="text-2xl font-bold mb-2 text-indigo-700">
+          {user?.displayName || user?.name}
+        </h2>
+        <p className="text-gray-600 mb-4">{user?.email || "Email not available"}</p>
+        <button
+          onClick={() => window.open("http://localhost:6005/logout", "_self")}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

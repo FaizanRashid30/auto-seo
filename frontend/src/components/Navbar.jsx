@@ -1,67 +1,96 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // <-- import useLocation
+import { NavLink } from "react-router-dom";
 import logo from "../../asserts/logo.png";
+import axios from "axios";
 
-const Navbar = ({ toggleSidebar }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation(); // <-- get current route
+const Navbar = () => {
+  const [userdata, setUserdata] = useState({});
+  console.log("response", userdata);
+
+  const getUser = async () => {
+    try {
+      const response = await axios.get("http://localhost:6005/login/sucess", {
+        withCredentials: true,
+      });
+      setUserdata(response.data.user);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const logout = () => {
+    window.open("http://localhost:6005/logout", "_self");
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const offset = window.scrollY;
-      if (offset > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    if (location.pathname === "/") {
-      // only add scroll listener on home page
-      window.addEventListener('scroll', handleScroll);
-    }
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]); // re-run when path changes
-
-  // Set classes based on scroll only if on Home page
-  const navbarClasses = `fixed top-0 left-0 w-full flex items-center justify-between px-6 py-4 shadow-md z-50 transition-all duration-300 ${
-    location.pathname === "/"
-      ? (isScrolled ? 'backdrop-blur text-white' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white')
-      : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' // No scroll effect on other pages
-  }`;
+    getUser();
+  }, []);
 
   return (
-    <nav className={navbarClasses}>
-      {/* Left - Sidebar Toggle & Logo */}
-      <div className="flex items-center gap-3">
-        <a href="/">
+    <header className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md py-4 px-6 fixed w-full z-50">
+      <nav className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Logo / Brand Name */}
+        <div className="text-2xl font-bold">
+          <NavLink to="/">
           <img className="h-[70px] w-[150px]" src={logo} alt="logo" />
-        </a>
-      </div>
+          </NavLink>
+        </div>
 
-      {/* Right - Navigation Links */}
-      <div className="flex gap-8 text-xl">
-        <Link to="/" className="hover:text-yellow-300 transition duration-200">
-          Home
-        </Link>
+        {/* Navigation Links */}
+        <ul className="flex gap-6 items-center text-lg">
+          <li>
+            <NavLink
+              to="/"
+              className="hover:text-yellow-300 transition duration-200"
+            >
+              Home
+            </NavLink>
+          </li>
 
-        <Link to="/contact" className="hover:text-yellow-300 transition duration-200">
-          Contact Us
-        </Link>
-
-        <Link to="/profile" className="hover:text-yellow-300 transition duration-200">
-          Profile
-        </Link>
-
-        <span
-          onClick={() => alert('Logout logic will go here')}
-          className="hover:text-yellow-300 cursor-pointer transition duration-200"
-        >
-          Login
-        </span>
-      </div>
-    </nav>
+          {Object.keys(userdata).length > 0 ? (
+            <>
+              
+              <li>
+                <NavLink
+                  to="/profile"
+                  className="hover:text-yellow-300 transition duration-200"
+                >
+                  Profile
+                </NavLink>
+              </li>
+             
+              <li className="font-semibold text-black bg-white px-3 py-1 rounded">
+                {userdata?.displayName}
+              </li>
+              <li>
+                <img
+                  src={userdata?.image}
+                  alt="User"
+                  className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                />
+              </li>
+               <li>
+                <button
+                  onClick={logout}
+                  className="hover:text-yellow-300 transition duration-200 focus:outline-none"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <NavLink
+                to="/login"
+                className="hover:text-yellow-300 transition duration-200"
+              >
+                Login
+              </NavLink>
+            </li>
+          )}
+        </ul>
+      </nav>
+    </header>
   );
 };
 
