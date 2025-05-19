@@ -9,6 +9,7 @@ import SignupPage from './pages/SignupPage';
 import ContactUs from './pages/Contactus';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import SEO from './pages/SEO';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -43,6 +44,7 @@ function App() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/seo" element={<SEO />} />
 
           {/* Protected Route */}
           <Route

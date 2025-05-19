@@ -46,6 +46,14 @@ const Navbar = () => {
               Home
             </NavLink>
           </li>
+            <li>
+            <NavLink
+              to="/contact"
+              className="hover:text-yellow-300 transition duration-200"
+            >
+              Contact
+            </NavLink>
+          </li>
 
           {Object.keys(userdata).length > 0 ? (
             <>
@@ -56,6 +64,14 @@ const Navbar = () => {
                   className="hover:text-yellow-300 transition duration-200"
                 >
                   Profile
+                </NavLink>
+              </li>
+               <li>
+                <NavLink
+                  to="/seo"
+                  className="hover:text-yellow-300 transition duration-200"
+                >
+                  SEO
                 </NavLink>
               </li>
              

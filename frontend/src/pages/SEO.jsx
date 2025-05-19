@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Home = () => {
+const SEO = () => {
   const [image, setImage] = useState(null);
   const [desc, setDesc] = useState('');
 
@@ -76,4 +76,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default SEO;
