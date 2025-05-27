@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SEO = () => {
   const [image, setImage] = useState(null);
   const [desc, setDesc] = useState('');
+  const navigate = useNavigate();
 
   const handleImageUpload = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
   };
 
   const handleGenerateSEO = () => {
-    alert('🚀 SEO Generated!\n\nDescription: ' + desc);
+    if (!image) {
+      alert("⚠️ Please upload an image first.");
+      return;
+    }
+
+    navigate('/result', { state: { image } });
   };
 
   return (
@@ -25,7 +32,14 @@ const SEO = () => {
     >
       {/* Main Heading */}
       <div className="text-center mb-10 relative z-10">
-        <img src={image} alt=''/>
+        {/* ✅ Fixed image size */}
+        {image && (
+          <img
+            src={image}
+            alt=""
+            className="w-40 h-40 object-cover mx-auto rounded-full mb-4 border-4 border-white shadow-md"
+          />
+        )}
         <h1 className="text-5xl font-bold text-white drop-shadow-lg">
           Auto SEO Tool
         </h1>
@@ -46,7 +60,7 @@ const SEO = () => {
           className="mb-4 w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-white file:bg-blue-600 hover:file:bg-blue-700 transition duration-300"
         />
 
-        {/* Image Preview */}
+        {/* Image Preview Below Input */}
         {image && (
           <img
             src={image}
